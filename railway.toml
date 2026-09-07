@@ -1,0 +1,9 @@
+[build]
+builder = "RAILPACK"
+
+[deploy]
+preDeployCommand = ["flask --app run init-db"]
+startCommand = "gunicorn --bind 0.0.0.0:$PORT wsgi:app"
+healthcheckPath = "/"
+healthcheckTimeout = 100
+restartPolicyType = "ON_FAILURE"
