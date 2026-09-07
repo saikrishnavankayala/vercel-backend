@@ -20,6 +20,11 @@ class Config:
         'connect_args': {'connect_timeout': 10},
     }
     FRONTEND_URL = os.environ.get('FRONTEND_URL', 'http://localhost:5173')
+    # The deployed Vercel frontend and Railway API use different sites. Cookies
+    # must be SameSite=None and Secure for the admin login session to accompany
+    # API calls there; local HTTP development retains Flask's Lax behavior.
+    SESSION_COOKIE_SECURE = FRONTEND_URL.startswith('https://')
+    SESSION_COOKIE_SAMESITE = 'None' if SESSION_COOKIE_SECURE else 'Lax'
     EXPORT_SECRET = os.environ.get('EXPORT_SECRET', '')
     # Requested fixed credential for the local Mobile Hub admin dashboard.
     ADMIN_PASSWORD = 'SSSM@2013'
