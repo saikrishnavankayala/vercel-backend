@@ -2,9 +2,15 @@ import os
 from datetime import timedelta
 
 
+def database_uri():
+    """Use PyMySQL for standard MySQL URLs supplied by hosting providers."""
+    url = os.environ.get('DATABASE_URL', '')
+    return url.replace('mysql://', 'mysql+pymysql://', 1) if url.startswith('mysql://') else url
+
+
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY', 'development-only-change-me')
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', '')
+    SQLALCHEMY_DATABASE_URI = database_uri()
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ENGINE_OPTIONS = {
         'pool_size': 10,
